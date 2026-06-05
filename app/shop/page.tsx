@@ -6,9 +6,9 @@ import { ArrowLeft, SearchX } from "lucide-react";
 export default async function ShopPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string; category?: string }>;
+  searchParams: Promise<{ q?: string; category?: string; sale?: string }>;
 }) {
-  const { q, category } = await searchParams;
+  const { q, category, sale } = await searchParams;
   const supabase = await createClient();
 
   let query = supabase
@@ -25,10 +25,17 @@ export default async function ShopPage({
     query = query.eq("category", category);
   }
 
+  // Filter khusus barang diskon jika ada param sale=true
+  if (sale === "true") {
+    query = query.or("discount_percent.gt.0,discount_price.gt.0");
+  }
+
   const { data: products } = await query;
 
   const title = q
     ? `Hasil Cari: "${q}"`
+    : sale === "true"
+    ? "Promo Spesial 🔥"
     : category
     ? `Koleksi ${category}`
     : "Semua Koleksi";

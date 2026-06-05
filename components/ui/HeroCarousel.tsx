@@ -72,9 +72,12 @@ export default function HeroCarousel({ banners }: { banners: Banner[] }) {
                   Klaim Promo &rarr;
                 </Link>
               ) : (
-                <div className="inline-flex items-center justify-center px-8 py-4 text-sm font-black text-white bg-red-600 hover:bg-white hover:text-zinc-900 transition-all uppercase tracking-widest shadow-xl shadow-red-600/30 hover:shadow-white/30 hover:scale-105 active:scale-95">
-                  Jelajahi Sekarang
-                </div>
+                <Link 
+                  href="/shop?sale=true"
+                  className="inline-flex items-center justify-center px-8 py-4 text-sm font-black text-white bg-red-600 hover:bg-white hover:text-zinc-900 transition-all uppercase tracking-widest shadow-xl shadow-red-600/30 hover:shadow-white/30 hover:scale-105 active:scale-95"
+                >
+                  Jelajahi Promo 🔥
+                </Link>
               )}
             </div>
 
