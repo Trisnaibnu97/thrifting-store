@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dokumentasi Proyek</title>
+    <!-- Load Mermaid JS from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    </script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 1000px; margin: 0 auto; padding: 40px; color: #333; line-height: 1.6; }
+        h1 { border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        h2 { margin-top: 40px; color: #0056b3; }
+        .mermaid { display: flex; justify-content: center; margin: 30px 0; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #f8f9fa; }
+        @media print {
+            body { padding: 0; margin: 0; }
+            .mermaid { box-shadow: none; padding: 0; }
+            h2 { page-break-before: always; }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Dokumentasi Proyek E-Commerce Thrifting Store</h1>
+
+    <h2>1. Use Case Diagram</h2>
+    <div class="mermaid">
+        flowchart LR
+            Cust(["👤 Customer / Visitor"])
+            Adm(["👔 Store Administrator"])
+            DB(["🗄️ Supabase (DB & Auth)"])
+            API_Ship(["🚚 Komerce / RajaOngkir"])
+            API_Pay(["💳 Midtrans (Payment)"])
+
+            subgraph System["Rainsecond E-Commerce System"]
+                direction TB
+                UC1("Browse & Search Products")
+                UC2("View Product Details")
+                UC3("Manage Cart")
+                UC4("Checkout Order")
+                UC5("Login / Register")
+                UC6("Pay Order")
+                
+                UC7("View Dashboard (Stats & Charts)")
+                UC8("Manage Inventory (Products)")
+                UC9("Manage Orders")
+                UC10("Manage UI Banners")
+                
+                UC11("Calculate Shipping Cost")
+                UC12("Process Transaction")
+            end
+
+            Cust --> UC1
+            Cust --> UC2
+            Cust --> UC3
+            Cust --> UC4
+            Cust --> UC5
+            Cust --> UC6
+            
+            Adm --> UC5
+            Adm --> UC7
+            Adm --> UC8
+            Adm --> UC9
+            Adm --> UC10
+            
+            UC4 -. "&lt;&lt;include&gt;&gt;" .-> UC11
+            UC4 -. "&lt;&lt;include&gt;&gt;" .-> UC5
+            UC6 -. "&lt;&lt;include&gt;&gt;" .-> UC12
+            
+            UC5 --> DB
+            UC8 --> DB
+            UC9 --> DB
+            UC11 --> API_Ship
+            UC12 --> API_Pay
+    </div>
+
+    <h2>2. Class Diagram</h2>
+    <div class="mermaid">
+        classDiagram
+            class User {
+                +UUID id
+                +String email
+                +String role
+                +DateTime created_at
+            }
+            class Product {
+                +UUID id
+                +String name
+                +Decimal price
+                +String status
+                +Array image_urls
+            }
+            class Order {
+                +String order_id
+                +UUID user_id
+                +Decimal total_amount
+                +String status
+            }
+            class ShippingDetail {
+                &lt;&lt;DataType&gt;&gt;
+                +String courier_name
+                +Decimal cost
+            }
+            class PaymentDetail {
+                &lt;&lt;DataType&gt;&gt;
+                +String payment_type
+            }
+            
+            User "1" -- "0..*" Order : places
+            Order "1" *-- "1" ShippingDetail : contains
+            Order "1" *-- "1" PaymentDetail : contains
+            Order "0..*" -- "1..*" Product : includes
+    </div>
+
+    <h2>3. Activity Diagram (Alur Checkout)</h2>
+    <div class="mermaid">
+        flowchart TD
+            Start(("Mulai")) --> Buka_Keranjang
+            
+            subgraph Frontend ["Area Pengguna / Frontend"]
+                Buka_Keranjang["Buka Halaman Cart"]
+                Cek_Login{"Apakah Sudah Login?"}
+                Isi_Alamat["Isi Alamat & Kota Tujuan"]
+                Pilih_Kurir["Pilih Jasa Kurir"]
+                Klik_Bayar["Klik Bayar Sekarang"]
+            end
+            
+            subgraph Backend ["Area Sistem Server / Backend"]
+                Tarik_Data_Komerce["Request Biaya API Komerce"]
+                Buat_Order_DB["Simpan Order (Supabase)"]
+                Buat_Token_Midtrans["Request Snap Token (Midtrans)"]
+            end
+
+            Buka_Keranjang --> Cek_Login
+            Cek_Login -- "Sudah" --> Isi_Alamat
+            Isi_Alamat --> Tarik_Data_Komerce
+            Tarik_Data_Komerce --> Pilih_Kurir
+            Pilih_Kurir --> Klik_Bayar
+            Klik_Bayar --> Buat_Order_DB
+            Buat_Order_DB --> Buat_Token_Midtrans
+            Buat_Token_Midtrans --> Finish(("Selesai"))
+    </div>
+
+    <h2>4. Tabel Pengujian Blackbox</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Skenario Pengujian</th>
+                <th>Hasil yang Diharapkan (Expected Result)</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>Login dengan kredensial Admin yang benar</td>
+                <td>Sistem mengenali role "admin" dan mengarahkan ke halaman `/admin`</td>
+                <td>✅</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Melakukan Checkout tanpa melakukan login</td>
+                <td>Sistem memblokir aksi dan me-redirect paksa ke halaman `/login`</td>
+                <td>✅</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>Memilih kota tujuan pada form pengiriman</td>
+                <td>Sistem berhasil menghubungi API Komerce dan memunculkan harga JNE, dll.</td>
+                <td>✅</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>Simulasi pembayaran gagal di Midtrans</td>
+                <td>Status pesanan di database menjadi "cancel", dan barang kembali "available"</td>
+                <td>✅</td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>
