@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { User, LogOut, Loader2, CheckCircle2, ShoppingBag, Package, Clock } from "lucide-react";
 import Link from "next/link";
+import TestimonialForm from "@/components/TestimonialForm";
 
 export default function ProfilePage() {
   const [user, setUser] = useState<any>(null);
@@ -273,6 +274,9 @@ export default function ProfilePage() {
             </div>
           )}
         </div>
+
+        {/* Form Testimoni Baru */}
+        <TestimonialForm user={user} />
       </div>
     </div>
   );

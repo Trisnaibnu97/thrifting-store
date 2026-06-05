@@ -5,10 +5,10 @@ import AdminActions from "@/components/admin/AdminActions";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex h-screen bg-[#f2f4f8] font-sans text-[#0f1111]">
+    <div className="flex flex-col md:flex-row h-screen bg-[#f2f4f8] font-sans text-[#0f1111]">
       {/* Sidebar - Amazon Secondary Dark */}
-      <ul className="flex flex-col w-64 bg-[#232f3e] text-white overflow-y-auto shrink-0 border-r border-[#131921]">
-        <Link href="/admin" className="flex items-center justify-center h-16 border-b border-white/10 shrink-0 bg-[#131921]">
+      <ul className="flex flex-row md:flex-col w-full md:w-64 bg-[#232f3e] text-white overflow-x-auto md:overflow-y-auto shrink-0 border-b md:border-b-0 md:border-r border-[#131921] md:h-full">
+        <Link href="/admin" className="hidden md:flex items-center justify-center h-16 border-b border-white/10 shrink-0 bg-[#131921]">
           <div className="flex items-center gap-3 px-4 w-full">
             <div className="w-8 h-8 rounded bg-[#ff9900] text-zinc-900 flex items-center justify-center font-black text-xl">
               R
@@ -17,50 +17,56 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </div>
         </Link>
 
-        <div className="px-3 py-6">
-          <p className="text-[11px] font-bold text-[#eaeded]/60 uppercase tracking-wider mb-3 px-3">Home</p>
-          <li className="mb-1">
-            <Link href="/admin" className="flex items-center gap-3 px-3 py-2.5 rounded hover:bg-white/10 text-white font-medium text-sm transition-colors">
+        <div className="flex md:flex-col p-2 md:px-3 md:py-6 w-max md:w-auto items-center md:items-stretch gap-2 md:gap-0">
+          <p className="hidden md:block text-[11px] font-bold text-[#eaeded]/60 uppercase tracking-wider mb-3 px-3">Home</p>
+          <li className="list-none shrink-0 md:mb-1">
+            <Link href="/admin" className="flex items-center gap-2 md:gap-3 px-4 py-2 md:px-3 md:py-2.5 rounded-full md:rounded hover:bg-white/10 text-white font-medium text-xs md:text-sm transition-colors whitespace-nowrap">
               <LayoutDashboard size={18} />
               Dashboard
             </Link>
           </li>
 
-          <div className="my-6 border-t border-white/10"></div>
+          <div className="hidden md:block my-6 border-t border-white/10"></div>
 
-          <p className="text-[11px] font-bold text-[#eaeded]/60 uppercase tracking-wider mb-3 px-3">Catalog & Orders</p>
-          <li className="mb-1">
-            <Link href="/admin/products" className="flex items-center gap-3 px-3 py-2.5 rounded hover:bg-white/10 text-[#eaeded] hover:text-white font-medium text-sm transition-colors">
+          <p className="hidden md:block text-[11px] font-bold text-[#eaeded]/60 uppercase tracking-wider mb-3 px-3">Catalog & Orders</p>
+          <li className="list-none shrink-0 md:mb-1">
+            <Link href="/admin/products" className="flex items-center gap-2 md:gap-3 px-4 py-2 md:px-3 md:py-2.5 rounded-full md:rounded hover:bg-white/10 text-[#eaeded] hover:text-white font-medium text-xs md:text-sm transition-colors whitespace-nowrap">
               <ShoppingBag size={18} />
               Inventory
             </Link>
           </li>
-          <li className="mb-1">
-            <Link href="/admin/orders" className="flex items-center gap-3 px-3 py-2.5 rounded hover:bg-white/10 text-[#eaeded] hover:text-white font-medium text-sm transition-colors">
+          <li className="list-none shrink-0 md:mb-1">
+            <Link href="/admin/orders" className="flex items-center gap-2 md:gap-3 px-4 py-2 md:px-3 md:py-2.5 rounded-full md:rounded hover:bg-white/10 text-[#eaeded] hover:text-white font-medium text-xs md:text-sm transition-colors whitespace-nowrap">
               <LayoutDashboard size={18} />
               Manage Orders
             </Link>
           </li>
-          <li className="mb-1">
-            <Link href="/admin/reports/sales" className="flex items-center gap-3 px-3 py-2.5 rounded hover:bg-white/10 text-[#eaeded] hover:text-white font-medium text-sm transition-colors">
+          <li className="list-none shrink-0 md:mb-1">
+            <Link href="/admin/testimonials" className="flex items-center gap-2 md:gap-3 px-4 py-2 md:px-3 md:py-2.5 rounded-full md:rounded hover:bg-white/10 text-[#eaeded] hover:text-white font-medium text-xs md:text-sm transition-colors whitespace-nowrap">
+              <LayoutDashboard size={18} />
+              Testimonials
+            </Link>
+          </li>
+          <li className="list-none shrink-0 md:mb-1">
+            <Link href="/admin/reports/sales" className="flex items-center gap-2 md:gap-3 px-4 py-2 md:px-3 md:py-2.5 rounded-full md:rounded hover:bg-white/10 text-[#eaeded] hover:text-white font-medium text-xs md:text-sm transition-colors whitespace-nowrap">
               <LayoutDashboard size={18} />
               Sales Report
             </Link>
           </li>
 
-          <div className="my-6 border-t border-white/10"></div>
+          <div className="hidden md:block my-6 border-t border-white/10"></div>
 
-          <p className="text-[11px] font-bold text-[#eaeded]/60 uppercase tracking-wider mb-3 px-3">Settings</p>
-          <li className="mb-1">
-            <Link href="/admin/users" className="flex items-center gap-3 px-3 py-2.5 rounded hover:bg-white/10 text-[#eaeded] hover:text-white font-medium text-sm transition-colors">
+          <p className="hidden md:block text-[11px] font-bold text-[#eaeded]/60 uppercase tracking-wider mb-3 px-3">Settings</p>
+          <li className="list-none shrink-0 md:mb-1">
+            <Link href="/admin/users" className="flex items-center gap-2 md:gap-3 px-4 py-2 md:px-3 md:py-2.5 rounded-full md:rounded hover:bg-white/10 text-[#eaeded] hover:text-white font-medium text-xs md:text-sm transition-colors whitespace-nowrap">
               <Users size={18} />
-              User Permissions
+              Users
             </Link>
           </li>
-          <li className="mb-1">
-            <Link href="/admin/settings" className="flex items-center gap-3 px-3 py-2.5 rounded hover:bg-white/10 text-[#eaeded] hover:text-white font-medium text-sm transition-colors">
+          <li className="list-none shrink-0 md:mb-1">
+            <Link href="/admin/settings" className="flex items-center gap-2 md:gap-3 px-4 py-2 md:px-3 md:py-2.5 rounded-full md:rounded hover:bg-white/10 text-[#eaeded] hover:text-white font-medium text-xs md:text-sm transition-colors whitespace-nowrap">
               <Settings size={18} />
-              Store Settings
+              Settings
             </Link>
           </li>
         </div>

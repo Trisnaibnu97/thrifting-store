@@ -10,7 +10,7 @@ import path from "path";
 export default async function HomePage() {
   const supabase = await createClient();
 
-  const [{ data: products }, { data: banners }] = await Promise.all([
+  const [{ data: products }, { data: banners }, { data: testimonials }] = await Promise.all([
     supabase
       .from("products")
       .select("*")
@@ -21,10 +21,17 @@ export default async function HomePage() {
       .select("*")
       .eq("is_active", true)
       .order("sort_order", { ascending: true }),
+    supabase
+      .from("testimonials")
+      .select("*")
+      .eq("is_approved", true)
+      .order("created_at", { ascending: false })
+      .limit(6),
   ]);
 
   const activeBanners = banners ?? [];
   const allProducts = products ?? [];
+  const approvedTestimonials = testimonials ?? [];
 
   // Get dynamic settings
   let settings = {
@@ -88,6 +95,40 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* TESTIMONIALS SECTION */}
+      {approvedTestimonials.length > 0 && (
+        <section className="bg-white dark:bg-zinc-950 border-b border-zinc-200 dark:border-zinc-800 py-16 md:py-24">
+          <div className="container mx-auto px-4 md:px-8 max-w-6xl text-center">
+            <h2 className="text-3xl md:text-4xl font-black text-zinc-900 dark:text-white uppercase tracking-tighter mb-2">
+              Kata Mereka
+            </h2>
+            <p className="text-zinc-500 dark:text-zinc-400 mb-12 font-medium">Apa kata pelanggan tentang koleksi thrift kami.</p>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {approvedTestimonials.map((t) => (
+                <div key={t.id} className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-6 md:p-8 rounded-3xl text-left shadow-sm">
+                  <div className="flex items-center gap-1 mb-4 text-amber-400">
+                    {"★".repeat(t.rating)}{"☆".repeat(5 - t.rating)}
+                  </div>
+                  <p className="text-sm md:text-base text-zinc-700 dark:text-zinc-300 font-medium mb-6 italic leading-relaxed">
+                    "{t.content}"
+                  </p>
+                  <div className="flex items-center gap-3 mt-auto">
+                    <div className="w-10 h-10 rounded-full bg-zinc-200 dark:bg-zinc-800 flex items-center justify-center font-bold text-zinc-500 dark:text-zinc-400">
+                      {t.customer_name?.charAt(0).toUpperCase()}
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-sm text-zinc-900 dark:text-white">{t.customer_name}</h4>
+                      <p className="text-xs text-zinc-500 font-medium">Pelanggan Terverifikasi</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* PRODUCT GRID */}
       <section className="max-w-[1600px] mx-auto px-4 md:px-8 mt-12 md:mt-16">

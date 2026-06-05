@@ -29,7 +29,7 @@ export default function HeroCarousel({ banners }: { banners: Banner[] }) {
 
   return (
     <div 
-      className="relative w-full aspect-[4/5] md:aspect-[21/9] lg:aspect-[24/9] overflow-hidden bg-zinc-900 group cursor-pointer"
+      className="relative w-full aspect-[4/5] sm:aspect-square md:aspect-[21/9] lg:aspect-[24/9] overflow-hidden bg-zinc-900 group cursor-pointer"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -51,30 +51,30 @@ export default function HeroCarousel({ banners }: { banners: Banner[] }) {
                 priority={index === 0}
                 unoptimized
               />
-              <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-zinc-950/90 via-zinc-950/50 to-transparent flex flex-col justify-end md:justify-center p-8 md:p-16 lg:p-24" />
+              <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-zinc-950/90 via-zinc-950/60 to-transparent flex flex-col justify-end md:justify-center p-6 md:p-16 lg:p-24" />
             </div>
 
             {/* Teks dengan efek kemunculan dramatis */}
-            <div className={`absolute bottom-12 md:bottom-auto md:top-1/2 md:-translate-y-1/2 left-6 md:left-16 lg:left-24 max-w-2xl transition-all duration-700 delay-200 ${isActive ? "translate-y-0 opacity-100" : "translate-y-12 opacity-0"}`}>
-              <h2 className="text-white text-5xl md:text-7xl font-black mb-4 tracking-tighter uppercase leading-none drop-shadow-2xl">
+            <div className={`absolute bottom-8 md:bottom-auto md:top-1/2 md:-translate-y-1/2 left-4 md:left-16 lg:left-24 max-w-2xl pr-4 transition-all duration-700 delay-200 ${isActive ? "translate-y-0 opacity-100" : "translate-y-12 opacity-0"}`}>
+              <h2 className="text-white text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-3 md:mb-4 tracking-tighter uppercase leading-[1.1] md:leading-none drop-shadow-2xl">
                 {banner.title}
               </h2>
               {banner.subtitle && (
-                <p className="text-white/90 text-lg md:text-xl font-bold max-w-lg mb-8 uppercase tracking-widest drop-shadow-lg border-l-4 border-red-500 pl-4">
+                <p className="text-white/90 text-sm sm:text-base md:text-lg lg:text-xl font-bold max-w-lg mb-6 md:mb-8 uppercase tracking-widest drop-shadow-lg border-l-4 border-red-500 pl-3 md:pl-4">
                   {banner.subtitle}
                 </p>
               )}
               {banner.link_url ? (
                 <Link 
                   href={banner.link_url} 
-                  className="inline-flex items-center justify-center px-8 py-4 text-sm font-black text-white bg-red-600 hover:bg-white hover:text-zinc-900 transition-all uppercase tracking-widest shadow-xl shadow-red-600/30 hover:shadow-white/30 hover:scale-105 active:scale-95"
+                  className="inline-flex items-center justify-center px-6 py-3 md:px-8 md:py-4 text-xs md:text-sm font-black text-white bg-red-600 hover:bg-white hover:text-zinc-900 transition-all uppercase tracking-widest shadow-xl shadow-red-600/30 hover:shadow-white/30 hover:scale-105 active:scale-95"
                 >
                   Klaim Promo &rarr;
                 </Link>
               ) : (
                 <Link 
                   href="/shop?sale=true"
-                  className="inline-flex items-center justify-center px-8 py-4 text-sm font-black text-white bg-red-600 hover:bg-white hover:text-zinc-900 transition-all uppercase tracking-widest shadow-xl shadow-red-600/30 hover:shadow-white/30 hover:scale-105 active:scale-95"
+                  className="inline-flex items-center justify-center px-6 py-3 md:px-8 md:py-4 text-xs md:text-sm font-black text-white bg-red-600 hover:bg-white hover:text-zinc-900 transition-all uppercase tracking-widest shadow-xl shadow-red-600/30 hover:shadow-white/30 hover:scale-105 active:scale-95"
                 >
                   Jelajahi Promo 🔥
                 </Link>
