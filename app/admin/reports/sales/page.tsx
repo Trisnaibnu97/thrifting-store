@@ -31,13 +31,15 @@ export default async function SalesReportPage() {
     }).format(date);
   };
 
-  // Calculate some stats
+  // Hitung total hanya untuk pesanan yang sudah dibayar atau lebih lanjut
+  const successfulStatuses = ["settlement", "dikemas", "dikirim", "selesai", "paid", "success"];
+  
   const totalSales = allOrders
-    .filter(o => o.status === "paid" || o.status === "success")
+    .filter(o => successfulStatuses.includes(o.status))
     .reduce((sum, o) => sum + o.total_amount, 0);
 
   const totalOrders = allOrders.length;
-  const successfulOrders = allOrders.filter(o => o.status === "paid" || o.status === "success").length;
+  const successfulOrders = allOrders.filter(o => successfulStatuses.includes(o.status)).length;
 
   return (
     <div className="container-fluid font-sans text-[#858796]">
@@ -133,8 +135,8 @@ export default async function SalesReportPage() {
                     <td className="px-5 py-3">
                       <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${
                         order.status === "pending" ? "bg-[#f6c23e]/10 text-[#f6c23e]" :
-                        order.status === "paid" || order.status === "success" ? "bg-[#1cc88a]/10 text-[#1cc88a]" :
-                        order.status === "failed" || order.status === "cancel" ? "bg-[#e74a3b]/10 text-[#e74a3b]" :
+                        successfulStatuses.includes(order.status) ? "bg-[#1cc88a]/10 text-[#1cc88a]" :
+                        order.status === "failed" || order.status === "cancel" || order.status === "deny" ? "bg-[#e74a3b]/10 text-[#e74a3b]" :
                         "bg-[#858796]/10 text-[#858796]"
                       }`}>
                         {order.status.toUpperCase()}
