@@ -36,17 +36,19 @@ export default async function HomePage() {
   const allProducts = products ?? [];
   const approvedTestimonials = testimonials ?? [];
 
-  // Get dynamic settings
+  // Get dynamic settings from Supabase
   let settings = {
     aboutUs: "Kami adalah toko thrifting pilihan.",
     contactUs: "Hubungi kami di IG."
   };
   try {
-    const settingsPath = path.join(process.cwd(), "data", "settings.json");
-    const fileData = await fs.readFile(settingsPath, "utf8");
-    settings = JSON.parse(fileData);
+    const { data: settingsData } = await supabase.from("settings").select("*").eq("id", 1).single();
+    if (settingsData) {
+      settings.aboutUs = settingsData.about_us;
+      settings.contactUs = settingsData.contact_us;
+    }
   } catch (e) {
-    console.error("Failed to load settings", e);
+    console.error("Failed to load settings from Supabase", e);
   }
 
   return (
