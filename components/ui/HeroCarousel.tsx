@@ -47,9 +47,9 @@ export default function HeroCarousel({ banners }: { banners: Banner[] }) {
                 src={banner.image_url}
                 alt={banner.title}
                 fill
+                sizes="100vw"
                 className={`object-cover transition-transform duration-[10000ms] ease-linear ${isActive ? "scale-110" : "scale-100"}`}
                 priority={index === 0}
-                unoptimized
               />
               <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-zinc-950/90 via-zinc-950/60 to-transparent flex flex-col justify-end md:justify-center p-6 md:p-16 lg:p-24" />
             </div>
@@ -87,10 +87,12 @@ export default function HeroCarousel({ banners }: { banners: Banner[] }) {
               {/* Polaroid 1 (Back) */}
               <div className="absolute top-10 -left-16 w-56 h-64 bg-white p-3 pb-12 -rotate-12 shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all duration-500 hover:scale-105 hover:-rotate-6 hover:z-30 group/p1">
                 <div className="relative w-full h-full bg-zinc-200 overflow-hidden">
-                  <img 
+                  <Image 
                     src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?q=80&w=600&auto=format&fit=crop" 
                     alt="Vintage Tee" 
-                    className="w-full h-full object-cover filter grayscale group-hover/p1:grayscale-0 transition-all duration-500" 
+                    fill
+                    sizes="224px"
+                    className="object-cover filter grayscale group-hover/p1:grayscale-0 transition-all duration-500" 
                   />
                 </div>
               </div>
@@ -98,10 +100,12 @@ export default function HeroCarousel({ banners }: { banners: Banner[] }) {
               {/* Polaroid 2 (Front) */}
               <div className="absolute top-0 right-0 w-64 h-72 bg-white p-3 pb-12 rotate-6 shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all duration-500 hover:scale-110 hover:rotate-2 hover:z-30 z-20 group/p2">
                 <div className="relative w-full h-full bg-zinc-200 overflow-hidden">
-                  <img 
+                  <Image 
                     src={banner.image_url} 
                     alt="Current Banner Thumbnail" 
-                    className="w-full h-full object-cover group-hover/p2:scale-110 transition-all duration-700" 
+                    fill
+                    sizes="256px"
+                    className="object-cover group-hover/p2:scale-110 transition-all duration-700" 
                   />
                 </div>
                 {/* Vintage Tape effect */}

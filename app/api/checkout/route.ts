@@ -5,19 +5,13 @@ import midtransClient from "midtrans-client";
 
 export async function POST(req: Request) {
   try {
-    const serverKey = process.env.MIDTRANS_SERVER_KEY?.trim() || "";
-    const clientKey = process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY?.trim() || "";
+    const isProduction = process.env.MIDTRANS_IS_PRODUCTION === "true";
+    const serverKey = process.env.MIDTRANS_SERVER_KEY || "";
+    const clientKey = process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY || "";
 
-    if (!serverKey) {
+    if (!serverKey || !clientKey) {
       return NextResponse.json({ error: "Konfigurasi Midtrans belum lengkap di .env.local" }, { status: 500 });
     }
-
-    // Pindahkan inisialisasi ke dalam fungsi agar environment variable selalu terbaca dengan benar
-    const snap = new midtransClient.Snap({
-      isProduction: false,
-      serverKey: serverKey,
-      clientKey: clientKey,
-    });
 
     const body = await req.json() as {
       items: Product[];
@@ -48,51 +42,56 @@ export async function POST(req: Request) {
 
     const itemDetails = items.map((item) => ({
       id: item.id,
+      name: item.name.substring(0, 50),
       price: getFinalPrice(item),
       quantity: 1,
-      name: item.name.substring(0, 50),
     }));
 
     if (shippingCost > 0) {
       itemDetails.push({
-        id: `SHIPPING-${shipping?.courier?.toUpperCase() || "STD"}`,
+        id: "SHIPPING",
+        name: `Ongkir ${shipping?.courier?.toUpperCase() || ""} ${shipping?.service || ""}`.substring(0, 50),
         price: shippingCost,
         quantity: 1,
-        name: `Ongkir ${shipping?.courier?.toUpperCase() || ""} ${shipping?.service || ""}`.substring(0, 50),
       });
     }
 
-    const parameter = {
+    // Panggil API Midtrans
+    let snap = new midtransClient.Snap({
+      isProduction: isProduction,
+      serverKey: serverKey,
+      clientKey: clientKey
+    });
+
+    let parameter = {
       transaction_details: {
         order_id: orderId,
-        gross_amount: serverTotal,
+        gross_amount: serverTotal
       },
+      item_details: itemDetails,
       customer_details: {
         first_name: customerName.split(" ")[0],
         last_name: customerName.split(" ").slice(1).join(" ") || "",
         email: customerEmail,
-        phone: customerPhone || "",
+        phone: customerPhone || "08111111111",
         shipping_address: {
           first_name: customerName.split(" ")[0],
           last_name: customerName.split(" ").slice(1).join(" ") || "",
-          phone: customerPhone || "",
+          phone: customerPhone || "08111111111",
           address: customerAddress || "-",
-          city: "Bogor", // Default city placeholder
+          city: shipping?.cityName || "Bogor",
+          postal_code: "16111",
           country_code: "IDN"
         }
-      },
-      item_details: itemDetails,
+      }
     };
 
     const transaction = await snap.createTransaction(parameter);
 
-    if (!transaction || !transaction.redirect_url) {
-      return NextResponse.json({ error: "Gagal membuat transaksi Midtrans" }, { status: 500 });
-    }
-
+    // Simpan ke Database
     const { error: dbError } = await supabase.from("orders").insert({
       order_id: orderId,
-      items: items, // Kolom di database bernama 'items', bukan 'product_ids'
+      items: items,
       total_amount: serverTotal,
       shipping_cost: shippingCost,
       shipping_courier: shipping ? `${shipping.courier} - ${shipping.service}` : "-",
@@ -102,7 +101,7 @@ export async function POST(req: Request) {
       customer_phone: customerPhone || null,
       customer_address: customerAddress || "-",
       status: "pending",
-      reference: transaction.token, // Simpan token Snap Midtrans sebagai reference
+      reference: transaction.token, // Simpan reference/token Midtrans
     });
 
     if (dbError) {
@@ -111,9 +110,9 @@ export async function POST(req: Request) {
     }
 
     return NextResponse.json({
-      paymentUrl: transaction.redirect_url, // URL untuk diarahkan ke Midtrans Snap
+      paymentUrl: transaction.redirect_url, 
+      token: transaction.token,
       orderId: orderId,
-      reference: transaction.token,
     });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : "Internal Server Error";

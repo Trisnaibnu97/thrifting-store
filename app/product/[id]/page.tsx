@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@supabase/supabase-js";
 import AddToCartWrapper from "@/components/product/AddToCartWrapper";
 import LiveCounter from "@/components/product/LiveCounter";
 import { getFinalPrice, hasDiscount } from "@/types/product";
@@ -11,7 +11,11 @@ export default async function ProductDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const supabase = await createClient();
+  
+  // Use standard client without cookies to avoid opting into dynamic rendering
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+  const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
   const { data: product } = await supabase
     .from("products")

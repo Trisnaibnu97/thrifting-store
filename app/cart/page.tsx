@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { Trash2 } from "lucide-react";
 import ShippingForm, { SelectedShipping } from "@/components/cart/ShippingForm";
 import { getFinalPrice } from "@/types/product";
+import Script from "next/script";
 
 const PAYMENT_METHODS = [
   { code: "BC", name: "BCA Virtual Account", type: "bank" },
@@ -103,7 +104,27 @@ export default function CartPage() {
 
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Gagal membuat transaksi");
-      if (data.paymentUrl) router.push(data.paymentUrl);
+      
+      // Menggunakan pop-up Snap Midtrans
+      if (data.token) {
+        // @ts-ignore
+        window.snap.pay(data.token, {
+          onSuccess: function(result: any){
+            router.push("/profile");
+          },
+          onPending: function(result: any){
+            router.push("/profile");
+          },
+          onError: function(result: any){
+            alert("Pembayaran gagal!");
+            setLoading(false);
+          },
+          onClose: function(){
+            alert("Kamu menutup jendela pembayaran");
+            setLoading(false);
+          }
+        });
+      }
     } catch (err) {
       alert(err instanceof Error ? err.message : "Terjadi kesalahan sistem");
       setLoading(false);
@@ -120,6 +141,11 @@ export default function CartPage() {
 
   return (
     <div className="min-h-screen bg-white pb-20">
+      <Script 
+        src={process.env.NEXT_PUBLIC_MIDTRANS_IS_PRODUCTION === "true" ? "https://app.midtrans.com/snap/snap.js" : "https://app.sandbox.midtrans.com/snap/snap.js"} 
+        data-client-key={process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY} 
+        strategy="lazyOnload"
+      />
       <div className="container mx-auto px-4 py-12">
         <h1 className="text-3xl font-black tracking-tighter text-zinc-950 mb-10 uppercase">
           Keranjang Kamu

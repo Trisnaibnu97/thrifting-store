@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@supabase/supabase-js";
 import ProductCard from "@/components/product/ProductCard";
 import Link from "next/link";
 import { ArrowLeft, SearchX } from "lucide-react";
@@ -9,7 +9,11 @@ export default async function ShopPage({
   searchParams: Promise<{ q?: string; category?: string; sale?: string }>;
 }) {
   const { q, category, sale } = await searchParams;
-  const supabase = await createClient();
+  
+  // Use standard client without cookies to avoid opting into dynamic rendering for public pages
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+  const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
   let query = supabase
     .from("products")

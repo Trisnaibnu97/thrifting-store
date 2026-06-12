@@ -34,6 +34,7 @@ export default function ProductCard({ product }: { product: Product }) {
           src={mainImage}
           alt={product.name}
           fill
+          sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 20vw"
           className={`object-cover transition-all duration-700 ease-in-out group-hover:scale-110 ${
             hoverImage !== mainImage ? "group-hover:opacity-0" : ""
           } ${product.status === 'sold' ? 'opacity-80 grayscale-[50%]' : ''}`}
@@ -45,6 +46,7 @@ export default function ProductCard({ product }: { product: Product }) {
             src={hoverImage}
             alt={`${product.name} - hover`}
             fill
+            sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 20vw"
             className={`object-cover transition-all duration-700 ease-in-out opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-110 ${
               product.status === 'sold' ? 'grayscale-[50%]' : ''
             }`}

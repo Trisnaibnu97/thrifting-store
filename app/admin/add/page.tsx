@@ -90,7 +90,7 @@ export default function AddProductPage() {
   return (
     <div className="container mx-auto px-4 py-10">
       <div className="max-w-2xl mx-auto p-10 border border-zinc-100 rounded-3xl bg-white shadow-xl shadow-zinc-50">
-        
+
         <div className="mb-10 text-center">
           <h1 className="text-3xl font-extrabold text-zinc-950 tracking-tighter">Tambah Koleksi RAINSECOND</h1>
           <p className="text-base text-zinc-600 mt-2 font-medium">Isi detail 'harta karun' terbaru kamu dengan teliti ya!</p>
@@ -160,11 +160,11 @@ export default function AddProductPage() {
                 {aiLoading ? "MENGHASILKAN..." : "AUTO-GENERATE AI"}
               </button>
             </div>
-            <textarea 
-              name="description" 
+            <textarea
+              name="description"
               ref={descRef}
-              placeholder="Jelaskan detail minus (kalau ada), pudar warna, dll..." 
-              className={`${inputClassName} h-32 resize-none`} 
+              placeholder="Jelaskan detail minus (kalau ada), pudar warna, dll..."
+              className={`${inputClassName} h-32 resize-none`}
             />
           </div>
 
@@ -201,7 +201,7 @@ export default function AddProductPage() {
           </div>
 
           {/* TOMBOL */}
-          <button 
+          <button
             disabled={loading}
             className={`w-full py-4 flex items-center justify-center gap-3 rounded-full font-extrabold text-white transition shadow-lg shadow-orange-100 ${loading ? 'bg-zinc-400' : 'bg-orange-600 hover:bg-orange-700 hover:-translate-y-0.5'}`}
           >

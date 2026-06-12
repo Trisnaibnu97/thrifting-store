@@ -3,12 +3,15 @@ import Image from "next/image";
 import ProductCard from "@/components/product/ProductCard";
 import HeroCarousel from "@/components/ui/HeroCarousel";
 import PromoTicker from "@/components/ui/PromoTicker";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@supabase/supabase-js";
 import fs from "fs/promises";
 import path from "path";
 
 export default async function HomePage() {
-  const supabase = await createClient();
+  // Use standard client without cookies to allow Next.js to cache the page
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+  const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
   const [{ data: products }, { data: banners }, { data: testimonials }] = await Promise.all([
     supabase
@@ -101,7 +104,7 @@ export default async function HomePage() {
         <section className="bg-white dark:bg-zinc-950 border-b border-zinc-200 dark:border-zinc-800 py-16 md:py-24">
           <div className="container mx-auto px-4 md:px-8 max-w-6xl text-center">
             <h2 className="text-3xl md:text-4xl font-black text-zinc-900 dark:text-white uppercase tracking-tighter mb-2">
-              Kata Mereka
+              Apa kata Mereka?
             </h2>
             <p className="text-zinc-500 dark:text-zinc-400 mb-12 font-medium">Apa kata pelanggan tentang koleksi thrift kami.</p>
             
