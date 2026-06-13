@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Search, Bell, Mail, Menu, X, CheckCircle, Package } from "lucide-react";
 import AdminActions from "@/components/admin/AdminActions";
 
@@ -111,13 +112,15 @@ export default function AdminTopbar() {
         <div className="w-px h-6 bg-white/20 mx-1"></div>
         
         <div className="flex items-center gap-2 cursor-pointer group">
-          <div className="flex flex-col items-end hidden md:flex">
-            <span className="text-[11px] font-medium text-[#eaeded] leading-none mb-1">Hello, Admin</span>
-            <span className="text-sm font-bold text-white leading-none group-hover:text-[#ff9900] transition">Account & Settings</span>
-          </div>
-          <div className="w-8 h-8 rounded bg-[#eaeded] text-[#131921] flex items-center justify-center text-sm font-bold border border-transparent group-hover:border-[#ff9900] transition ml-2">
-            A
-          </div>
+          <Link href="/profile" className="flex items-center gap-2">
+            <div className="flex flex-col items-end hidden md:flex">
+              <span className="text-[11px] font-medium text-[#eaeded] leading-none mb-1">Hello, Admin</span>
+              <span className="text-sm font-bold text-white leading-none group-hover:text-[#ff9900] transition">Account & Settings</span>
+            </div>
+            <div className="w-8 h-8 rounded bg-[#eaeded] text-[#131921] flex items-center justify-center text-sm font-bold border border-transparent group-hover:border-[#ff9900] transition ml-2">
+              A
+            </div>
+          </Link>
           <div className="ml-1">
             <AdminActions id="" status="" showLogout={true} />
           </div>
