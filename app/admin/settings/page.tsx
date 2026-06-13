@@ -9,6 +9,8 @@ export default function AdminSettingsPage() {
   
   const [aboutUs, setAboutUs] = useState("");
   const [contactUs, setContactUs] = useState("");
+  const [whatsapp, setWhatsapp] = useState("");
+  const [instagram, setInstagram] = useState("");
 
   useEffect(() => {
     fetch("/api/settings")
@@ -16,6 +18,8 @@ export default function AdminSettingsPage() {
       .then(data => {
         setAboutUs(data.aboutUs || "");
         setContactUs(data.contactUs || "");
+        setWhatsapp(data.whatsapp || "");
+        setInstagram(data.instagram || "");
       });
   }, []);
 
@@ -27,11 +31,12 @@ export default function AdminSettingsPage() {
       const res = await fetch("/api/settings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ aboutUs, contactUs })
+        body: JSON.stringify({ aboutUs, contactUs, whatsapp, instagram })
       });
       if (!res.ok) throw new Error("Gagal menyimpan data");
       
       setSuccessMsg("Pengaturan Halaman berhasil disimpan!");
+      alert("Berhasil! Pengaturan berhasil disimpan."); // Pop-up alert
       setTimeout(() => setSuccessMsg(""), 3000);
     } catch (error) {
       alert("Error: Gagal menyimpan pengaturan.");
@@ -103,11 +108,23 @@ export default function AdminSettingsPage() {
             <div className="p-5 grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className={labelClass}><Phone size={12} className="inline mr-1"/> Nomor WhatsApp (CS)</label>
-                <input type="text" defaultValue="081234567890" className={inputClass} />
+                <input 
+                  type="text" 
+                  value={whatsapp} 
+                  onChange={(e) => setWhatsapp(e.target.value)} 
+                  placeholder="081234567890" 
+                  className={inputClass} 
+                />
               </div>
               <div>
                 <label className={labelClass}><AtSign size={12} className="inline mr-1"/> Username Instagram</label>
-                <input type="text" defaultValue="@rainsecond_thrift" className={inputClass} />
+                <input 
+                  type="text" 
+                  value={instagram} 
+                  onChange={(e) => setInstagram(e.target.value)} 
+                  placeholder="@rainsecond_thrift" 
+                  className={inputClass} 
+                />
               </div>
             </div>
           </div>

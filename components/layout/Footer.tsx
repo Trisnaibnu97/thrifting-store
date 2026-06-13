@@ -9,7 +9,7 @@ const Footer = () => {
       <div className="container mx-auto px-6 md:px-12">
         {/* Top Section: Giant Typography & Testimonials */}
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-16 gap-12">
-          
+
           <div className="flex flex-col">
             <h1 className="text-6xl sm:text-7xl md:text-9xl font-black tracking-tighter uppercase leading-none text-white">
               RAIN
@@ -23,7 +23,7 @@ const Footer = () => {
 
           {/* Testimonial/Review Widget next to the text */}
           <div className="flex flex-col gap-4">
-            
+
             <div className="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl w-full max-w-sm shadow-2xl relative overflow-hidden group/testi hover:bg-zinc-800/80 transition-all">
               <div className="flex items-center gap-1 mb-2 text-[#ff9900]">
                 {[...Array(5)].map((_, i) => (
@@ -69,7 +69,7 @@ const Footer = () => {
 
         {/* Middle Section: Grid Links */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 mb-24 border-t border-zinc-800 pt-12">
-          
+
           <div className="flex flex-col gap-4">
             <h3 className="text-xs font-black uppercase tracking-widest text-zinc-500 mb-2">Explore</h3>
             <Link href="/shop" className="text-sm font-bold uppercase hover:text-red-500 transition-colors flex items-center gap-1 group">
@@ -113,9 +113,9 @@ const Footer = () => {
             <h3 className="text-xs font-black uppercase tracking-widest text-zinc-500 mb-2">Newsletter</h3>
             <p className="text-xs font-bold text-zinc-400">Akses awal ke rilis mingguan kami.</p>
             <div className="flex mt-2">
-              <input 
-                type="email" 
-                placeholder="EMAIL ADDRESS" 
+              <input
+                type="email"
+                placeholder="EMAIL ADDRESS"
                 className="bg-transparent border-b-2 border-zinc-800 text-white placeholder:text-zinc-600 focus:border-white outline-none py-2 text-xs font-black uppercase w-full transition-colors"
               />
               <button className="bg-white text-zinc-950 px-4 text-xs font-black uppercase hover:bg-red-600 hover:text-white transition-colors">
@@ -129,14 +129,14 @@ const Footer = () => {
         {/* Bottom Section: Copyright & Ticker */}
         <div className="flex flex-col items-center">
           <div className="w-full h-px bg-zinc-800 mb-8"></div>
-          
+
           <div className="flex flex-col md:flex-row justify-between w-full items-center gap-4">
             <p className="text-[10px] font-black uppercase tracking-widest text-zinc-500">
               © {new Date().getFullYear()} RAINSECOND. ALL RIGHTS RESERVED.
             </p>
-            
+
             <div className="flex gap-2 text-[10px] font-black uppercase tracking-widest text-zinc-600">
-              <span>JAKARTA</span>
+              <span>BOGOR</span>
               <span>—</span>
               <span>INDONESIA</span>
             </div>

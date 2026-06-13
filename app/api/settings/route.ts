@@ -13,23 +13,32 @@ export async function GET() {
     
     return NextResponse.json({
       aboutUs: data.about_us,
-      contactUs: data.contact_us
+      contactUs: data.contact_us,
+      whatsapp: data.whatsapp,
+      instagram: data.instagram
     });
   } catch (error) {
     return NextResponse.json({
       aboutUs: "Toko thrift pilihan.",
-      contactUs: "Hubungi kami di IG."
+      contactUs: "Hubungi kami di IG.",
+      whatsapp: "081234567890",
+      instagram: "@rainsecond_thrift"
     });
   }
 }
 
 export async function POST(req: Request) {
   try {
-    const { aboutUs, contactUs } = await req.json();
+    const { aboutUs, contactUs, whatsapp, instagram } = await req.json();
     
     const { error } = await supabase
       .from("settings")
-      .update({ about_us: aboutUs, contact_us: contactUs })
+      .update({ 
+        about_us: aboutUs, 
+        contact_us: contactUs,
+        whatsapp: whatsapp,
+        instagram: instagram
+      })
       .eq("id", 1);
       
     if (error) throw error;
