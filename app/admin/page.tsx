@@ -9,6 +9,7 @@ import {
 import AdminActions from "@/components/admin/AdminActions";
 import SalesChart from "@/components/admin/SalesChart";
 import BannerManager from "@/components/admin/BannerManager";
+import WelcomeOverlay from "@/components/admin/WelcomeOverlay";
 
 export default async function AdminDashboard() {
   const supabase = await createClient();
@@ -16,6 +17,14 @@ export default async function AdminDashboard() {
   // Auth check
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
+
+  const role = user.user_metadata?.role || "customer";
+  const userEmail = user.email || "";
+  const isAdmin = role === "admin" || userEmail === "admin@admin.com" || userEmail === "admin@gmail.com";
+
+  if (!isAdmin) {
+    redirect("/profile"); // Tolak akses jika bukan admin
+  }
 
   // Fetch semua data paralel
   const [
@@ -119,7 +128,9 @@ export default async function AdminDashboard() {
     new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", minimumFractionDigits: 0 }).format(n);
 
   return (
-    <div className="container-fluid font-sans text-[#0f1111]">
+    <div className="container-fluid font-sans text-[#0f1111] relative">
+      <WelcomeOverlay userName={user?.user_metadata?.full_name || "Admin"} />
+      
       {/* Page Heading */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
         <h1 className="text-2xl font-bold text-[#0f1111] mb-0">Dashboard</h1>

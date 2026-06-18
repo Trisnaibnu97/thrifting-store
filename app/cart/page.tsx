@@ -119,8 +119,30 @@ export default function CartPage() {
             alert("Pembayaran gagal!");
             setLoading(false);
           },
-          onClose: function(){
-            alert("Kamu menutup jendela pembayaran");
+          onClose: async function(){
+            // --- MODE SIMULASI (PENGGANTI PRODUCTION) ---
+            // Saat user klik 'tutup' pop-up Midtrans, kita anggap pembayaran SUKSES.
+            
+            // 1. Kirim Notif Fonnte ke WA Admin
+            try {
+              const rincianBarang = items.map(item => `- ${item.name} (Size: ${item.size})`).join('\n');
+              const pesanAdmin = `🚨 *PESANAN BARU MASUK* 🚨\n\n✅ *Status: PEMBAYARAN BERHASIL (LUNAS)*\n*(Simulasi Midtrans)*\n\n*Detail Pelanggan:*\n👤 Nama: ${customerName}\n📍 Alamat: ${customerAddress}\n\n*Rincian Pesanan:*\n${rincianBarang}\n\n*Total Tagihan:* Rp ${grandTotal.toLocaleString('id-ID')}\n\nSilakan cek Dashboard Admin untuk memproses pesanan.`;
+              
+              await fetch("/api/whatsapp", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: pesanAdmin })
+              });
+            } catch (err) {
+              console.error("Gagal kirim notif WA", err);
+            }
+
+            // 2. Kosongkan keranjang belanja
+            clearCart();
+
+            // 3. Arahkan ke halaman Sukses Pembayaran
+            router.push("/payment/return?resultCode=00&merchantOrderId=" + new Date().getTime());
+            
             setLoading(false);
           }
         });

@@ -16,7 +16,7 @@ flowchart LR
         UC2("View Product Details")
         UC3("Manage Cart")
         UC4("Checkout Order")
-        UC5("Login / Register")
+        UC5("Single Unified Login (Email/Google)")
         UC6("Pay Order")
         UC7("View Dashboard (Stats & Charts)")
         UC8("Manage Inventory (Products)")

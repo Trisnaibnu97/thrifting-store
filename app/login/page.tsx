@@ -26,11 +26,14 @@ export default function CustomerLoginPage() {
       alert(`Gagal login: Email atau password salah.`);
       setLoading(false);
     } else {
-      const role = data.user?.user_metadata?.role || "admin";
-      if (role === "admin") {
-        router.push("/admin"); // Jika admin nyasar kesini, tetap arahkan dengan benar
+      const role = data.user?.user_metadata?.role || "customer";
+      const userEmail = data.user?.email || "";
+      const isAdmin = role === "admin" || userEmail === "admin@admin.com" || userEmail === "admin@gmail.com";
+
+      if (isAdmin) {
+        router.push("/admin"); // Langsung ke dashboard admin
       } else {
-        router.push("/profile"); // Arahkan pelanggan ke profil (atau bisa ke /cart)
+        router.push("/profile"); // Arahkan pelanggan ke profil
       }
       router.refresh();
     }
